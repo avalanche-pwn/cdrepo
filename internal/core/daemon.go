@@ -39,9 +39,11 @@ func serve(initialPath string) error {
 		println("failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
+
 	var d daemon
 	d.init()
 	d.register(initialPath)
+
 	pb.RegisterDaemonServer(s, &d)
 	println("daemon listening at %v", lis.Addr())
 	return s.Serve(lis)

@@ -124,7 +124,7 @@ func levenshtein(a, b string, maxDistance int) int {
 	return result
 }
 
-func (bktree *BKTree) Add(s string) {
+func (bktree BKTree) Add(s string) {
 	if bktree.root == nil {
 		var r node
 		bktree.root = &r
@@ -151,7 +151,7 @@ func (bktree *BKTree) Add(s string) {
 	}
 }
 
-func (bktree *BKTree) Search(s string) []string {
+func (bktree BKTree) Search(s string) []string {
 	if bktree.root == nil {
 		return nil
 	}
@@ -185,7 +185,7 @@ func (bktree BKTree) Save(s string) {
 	os.WriteFile(s, network.Bytes(), 0644)
 }
 
-func (bktree *BKTree) Read(s string) {
+func (bktree BKTree) Read(s string) {
 	f, _ := os.Open(s)
 	defer f.Close()
 	dec := gob.NewDecoder(f) // Will write to network.

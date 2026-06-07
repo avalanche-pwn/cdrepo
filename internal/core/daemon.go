@@ -2,8 +2,8 @@ package core
 
 import (
 	"context"
-	"net"
 	"fmt"
+	"net"
 
 	"github.com/avalanche-pwn/cdrepo/internal/bk_tree"
 	pb "github.com/avalanche-pwn/cdrepo/internal/daemon_pb"
@@ -20,15 +20,18 @@ func searchFactory() FuzzySearcher {
 }
 
 func (d *daemon) register(path string) {
-	fmt.Printf("Adding path %s\n", path)
-	d.search.Add(path)
+	if isRepo(path) {
+		fmt.Printf("Adding path %s\n", path)
+		d.search.Add(path)
+	}
 }
 
 func (d *daemon) init() {
 	d.search = searchFactory()
 }
 
-func (d *daemon) Register(_ context.Context, in *pb.RegisterRequest) (*pb.RegisterResponse, error) {
+func (d *daemon) Register(_ context.Context, in *pb.RegisterRequest) (
+	*pb.RegisterResponse, error) {
 	d.register(in.Path)
 	return &pb.RegisterResponse{Success: true}, nil
 }

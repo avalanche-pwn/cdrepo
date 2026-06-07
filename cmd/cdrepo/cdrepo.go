@@ -2,16 +2,19 @@ package main
 
 import (
 	"flag"
-	"github.com/avalanche-pwn/cdrepo/internal/cdrepo"
+	"github.com/avalanche-pwn/cdrepo/internal/core"
+	"github.com/avalanche-pwn/cdrepo/internal/bk_tree"
 )
 
 func main() {
 	flag.BoolFunc("register",
-		"Change directory and register if it's a git repo", cdrepo.Register)
+		"Change directory and register if it's a git repo", core.Register)
 	flag.Parse()
-	var tree cdrepo.BKTree
+	var tree bk_tree.BKTree
 	tree.Read("test")
-	for _, a := range tree.Search("files") {
+	// tree.Add("dupa")
+	// tree.Add("zephyr")
+	for _, a := range tree.Search("zephyr") {
 		println(a)
 	}
 	tree.Save("test")

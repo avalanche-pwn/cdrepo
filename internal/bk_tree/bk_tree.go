@@ -1,4 +1,4 @@
-package cdrepo
+package bk_tree
 
 import (
 	"bytes"
@@ -175,14 +175,13 @@ func (bktree *BKTree) Search(s string) []string {
 	}
 	return result
 }
-type MagicOpen struct{}
 
 func (bktree BKTree) Save(s string) {
 	var network bytes.Buffer        // Stand-in for a network connection
 	enc := gob.NewEncoder(&network) // Will write to network.
 
 	// Encode (send) some values.
-	enc.Encode(bktree.root)
+	enc.Encode(bktree.Encode())
 	os.WriteFile(s, network.Bytes(), 0644)
 }
 
@@ -190,7 +189,9 @@ func (bktree *BKTree) Read(s string) {
 	f, _ := os.Open(s)
 	defer f.Close()
 	dec := gob.NewDecoder(f) // Will write to network.
+	var test modelOfBKTree
 
 	// Encode (send) some values.
-	dec.Decode(bktree)
+	dec.Decode(&test)
+	bktree.Decode(test)
 }

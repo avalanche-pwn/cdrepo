@@ -1,4 +1,4 @@
-package cdrepo
+package core
 
 import (
 	"os"

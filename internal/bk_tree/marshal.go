@@ -43,7 +43,10 @@ func (m *modelOfNode) Decode() node {
 }
 
 func (bktree *BKTree) Encode() any {
-	root_model := bktree.root.Encode()
+	var root_model modelOfNode
+	if bktree.root != nil {
+		root_model = bktree.root.Encode()
+	}
 	model := modelOfBKTree{Root: &root_model}
 	return model
 }

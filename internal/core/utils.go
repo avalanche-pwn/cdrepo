@@ -14,7 +14,10 @@ import (
 )
 
 const configPath string = "cdrepo"
+const searchFile string = "cdrepo.bin"
 const lockPath string = "/tmp/cdrepo.lock"
+const daemonCheckTimeout time.Duration = 10 * time.Second
+const daemonTimeout time.Duration = 60 * time.Second
 
 type FuzzySearcher interface {
 	Add(s string)
@@ -27,6 +30,11 @@ func init() {
 	home := os.Getenv("HOME")
 	fullConfPath := path.Join(home, ".config", configPath)
 	os.Mkdir(fullConfPath, os.ModePerm)
+}
+
+func binPath() string {
+	home := os.Getenv("HOME")
+	return path.Join(home, ".config", configPath, searchFile)
 }
 
 func requestRegister() {
@@ -51,6 +59,17 @@ func requestRegister() {
 	}
 }
 
+func waitWhileActive(keepAlive chan bool) {
+	lastUpdate := time.Now()
+	for time.Since(lastUpdate) < daemonTimeout {
+		select {
+		case <-keepAlive:
+			lastUpdate = time.Now()
+		case <-time.After(daemonCheckTimeout):
+		}
+	}
+}
+
 func Register(s string) error {
 	f, err := os.OpenFile(lockPath, os.O_CREATE|os.O_RDWR, 0644)
 	if err != nil {
@@ -65,5 +84,8 @@ func Register(s string) error {
 	defer f.Close()
 
 	p, _ := os.Getwd()
-	return serve(p)
+	d := serve(p)
+	waitWhileActive(d.keepAlive)
+	d.stop()
+	return nil
 }

@@ -133,6 +133,9 @@ func (bktree BKTree) Add(s string) {
 	}
 	current := bktree.root
 	for {
+		if current.value == s {
+			break
+		}
 		distance := levenshtein(current.value, s, -1)
 		for _, e := range current.edges {
 			if e.value != distance {

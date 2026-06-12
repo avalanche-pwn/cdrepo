@@ -9,6 +9,7 @@ import (
 	"time"
 
 	pb "github.com/avalanche-pwn/cdrepo/internal/daemon_pb"
+	"github.com/avalanche-pwn/cdrepo/internal/searchif"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -65,7 +66,7 @@ func waitWhileActive(keepAlive chan bool) {
 	}
 }
 
-func Register(s string) error {
+func Register() error {
 	f, err := os.OpenFile(lockPath, os.O_CREATE|os.O_RDWR, 0644)
 	if err != nil {
 		os.Exit(1)
@@ -85,7 +86,7 @@ func Register(s string) error {
 	return nil
 }
 
-func Search() {
+func Search(val string) []*searchif.SearchResult {
 	conn, err := grpc.NewClient("unix:/tmp/cdrepo.sock",
 		grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
@@ -97,11 +98,13 @@ func Search() {
 	// Contact the server and print out its response.
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	r, err := c.Search(ctx, &pb.SearchRequest{Query: "grep"})
+	r, err := c.Search(ctx, &pb.SearchRequest{Query: val})
 	if err != nil {
 		fmt.Printf("could not greet: %v\n", err)
 	}
-	for _, res := range r.Results {
-		println(res.Score, res.Value)
+	ret := make([]*searchif.SearchResult, len(r.Results))
+	for i, res := range r.Results {
+		ret[i] = &searchif.SearchResult{Score: int(res.Score), Value: res.Value}
 	}
+	return ret;
 }

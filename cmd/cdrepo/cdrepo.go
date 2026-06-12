@@ -3,11 +3,16 @@ package main
 import (
 	"flag"
 	"github.com/avalanche-pwn/cdrepo/internal/core"
+	"github.com/avalanche-pwn/cdrepo/internal/view"
 )
 
 func main() {
-	flag.BoolFunc("register",
-		"Change directory and register if it's a git repo", core.Register)
+	register := flag.Bool("register",
+		false, "Change directory and register if it's a git repo")
 	flag.Parse()
-	core.Search()
+	if *register {
+		core.Register()
+		return
+	}
+	view.Run()
 }

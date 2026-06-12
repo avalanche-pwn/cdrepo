@@ -4,9 +4,12 @@ import (
 	"bytes"
 	"encoding/gob"
 	"os"
+	"sort"
+
+	"github.com/avalanche-pwn/cdrepo/internal/searchif"
 )
 
-const maxEditDistance = 5
+const maxEditDistance = 100
 
 type edge struct {
 	value int
@@ -124,7 +127,7 @@ func levenshtein(a, b string, maxDistance int) int {
 	return result
 }
 
-func (bktree BKTree) Add(s string) {
+func (bktree *BKTree) Add(s string) {
 	if bktree.root == nil {
 		var r node
 		bktree.root = &r
@@ -133,9 +136,6 @@ func (bktree BKTree) Add(s string) {
 	}
 	current := bktree.root
 	for {
-		if current.value == s {
-			break
-		}
 		distance := levenshtein(current.value, s, -1)
 		for _, e := range current.edges {
 			if e.value != distance {
@@ -143,6 +143,9 @@ func (bktree BKTree) Add(s string) {
 			}
 			current = e.elem
 			continue
+		}
+		if current.value == s {
+			break
 		}
 		var n node
 		var e edge
@@ -154,19 +157,20 @@ func (bktree BKTree) Add(s string) {
 	}
 }
 
-func (bktree BKTree) Search(s string) []string {
+func (bktree *BKTree) Search(s string) []*searchif.SearchResult {
 	if bktree.root == nil {
 		return nil
 	}
 	candidates := make([]*node, 0)
-	result := make([]string, 0)
+	result := make([]*searchif.SearchResult, 0)
 	candidates = append(candidates, bktree.root)
 	for len(candidates) != 0 {
 		var current *node
 		current, candidates = candidates[0], candidates[1:]
 		distance := levenshtein(current.value, s, -1)
 		if distance < maxEditDistance {
-			result = append(result, current.value)
+			result = append(result,
+				&searchif.SearchResult{Score: distance, Value: current.value})
 		}
 		low := distance - maxEditDistance
 		high := distance + maxEditDistance
@@ -176,10 +180,11 @@ func (bktree BKTree) Search(s string) []string {
 			}
 		}
 	}
+	sort.Sort(searchif.ByScore(result))
 	return result
 }
 
-func (bktree BKTree) Save(s string) {
+func (bktree *BKTree) Save(s string) {
 	var network bytes.Buffer        // Stand-in for a network connection
 	enc := gob.NewEncoder(&network) // Will write to network.
 
@@ -188,7 +193,7 @@ func (bktree BKTree) Save(s string) {
 	os.WriteFile(s, network.Bytes(), 0644)
 }
 
-func (bktree BKTree) Read(s string) {
+func (bktree *BKTree) Read(s string) {
 	f, _ := os.Open(s)
 	defer f.Close()
 	dec := gob.NewDecoder(f) // Will write to network.

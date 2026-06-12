@@ -23,6 +23,7 @@ package helloworld;
 
 service Daemon {
   rpc Register (RegisterRequest) returns (RegisterResponse) {}
+  rpc Search (SearchRequest) returns (SearchResponse) {}
 }
 
 message RegisterRequest {
@@ -31,4 +32,17 @@ message RegisterRequest {
 
 message RegisterResponse {
     bool success = 1;
+}
+
+message SearchRequest {
+    string query = 1;
+}
+
+message SearchResponse {
+    repeated SearchResult results = 1;
+}
+
+message SearchResult {
+    int32 score = 1;
+    string value = 2;
 }

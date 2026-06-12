@@ -9,6 +9,7 @@ import (
 	"time"
 
 	pb "github.com/avalanche-pwn/cdrepo/internal/daemon_pb"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -19,12 +20,6 @@ const lockPath string = "/tmp/cdrepo.lock"
 const daemonCheckTimeout time.Duration = 10 * time.Second
 const daemonTimeout time.Duration = 60 * time.Second
 
-type FuzzySearcher interface {
-	Add(s string)
-	Read(s string)
-	Save(s string)
-	Search(s string) []string
-}
 
 func init() {
 	home := os.Getenv("HOME")
@@ -88,4 +83,25 @@ func Register(s string) error {
 	waitWhileActive(d.keepAlive)
 	d.stop()
 	return nil
+}
+
+func Search() {
+	conn, err := grpc.NewClient("unix:/tmp/cdrepo.sock",
+		grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		fmt.Printf("did not connect: %v\n", err)
+	}
+	defer conn.Close()
+	c := pb.NewDaemonClient(conn)
+
+	// Contact the server and print out its response.
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	r, err := c.Search(ctx, &pb.SearchRequest{Query: "grep"})
+	if err != nil {
+		fmt.Printf("could not greet: %v\n", err)
+	}
+	for _, res := range r.Results {
+		println(res.Score, res.Value)
+	}
 }

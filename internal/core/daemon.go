@@ -7,19 +7,21 @@ import (
 	"os"
 
 	"github.com/avalanche-pwn/cdrepo/internal/bk_tree"
+	"github.com/avalanche-pwn/cdrepo/internal/searchif"
 	pb "github.com/avalanche-pwn/cdrepo/internal/daemon_pb"
+
 	"google.golang.org/grpc"
 )
 
 type daemon struct {
 	pb.UnimplementedDaemonServer
-	search FuzzySearcher
-	grpcSrv *grpc.Server
+	search    searchif.FuzzySearcher
+	grpcSrv   *grpc.Server
 	keepAlive chan bool
 }
 
-func searchFactory() FuzzySearcher {
-	return bk_tree.BKTree{}
+func searchFactory() searchif.FuzzySearcher {
+	return &bk_tree.BKTree{}
 }
 
 func (d *daemon) register(path string) {
@@ -49,6 +51,19 @@ func (d *daemon) Register(_ context.Context, in *pb.RegisterRequest) (
 	d.keepAlive <- true
 	d.register(in.Path)
 	return &pb.RegisterResponse{Success: true}, nil
+}
+
+func (d *daemon) Search(_ context.Context, in *pb.SearchRequest) (
+	*pb.SearchResponse, error) {
+	api_res := d.search.Search(in.Query)
+	results := make([]*pb.SearchResult, len(api_res))
+
+	for i, val := range api_res {
+		results[i] = &pb.SearchResult{Score: int32(val.Score), Value: val.Value}
+	}
+
+	rsp := &pb.SearchResponse{Results: results}
+	return rsp, nil
 }
 
 func serve(initialPath string) daemon {

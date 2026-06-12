@@ -9,4 +9,5 @@ func main() {
 	flag.BoolFunc("register",
 		"Change directory and register if it's a git repo", core.Register)
 	flag.Parse()
+	core.Search()
 }

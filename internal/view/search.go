@@ -5,7 +5,9 @@ package view
 
 import (
 	"log"
+	"os"
 	"strings"
+	"fmt"
 
 	"charm.land/bubbles/v2/textinput"
 	tea "charm.land/bubbletea/v2"
@@ -16,21 +18,26 @@ import (
 )
 
 func Run() {
-	p := tea.NewProgram(initialModel())
-	if _, err := p.Run(); err != nil {
+	tty, err := os.OpenFile("/dev/tty", os.O_RDWR, 0)
+	if err != nil {
 		log.Fatal(err)
 	}
+	p := tea.NewProgram(initialModel(), tea.WithInput(tty), tea.WithOutput(tty))
+	tea_m, err := p.Run()
+	m := tea_m.(model)
+	if err != nil {
+		log.Fatal(err)
+	}
+	tty.Close()
+	fmt.Fprint(os.Stdout, m.repos[m.cursor].Value)
 }
-
-type (
-	errMsg error
-)
 
 type model struct {
 	textInput textinput.Model
 	err       error
 	quitting  bool
 	repos     []*searchif.SearchResult
+	cursor    int
 }
 
 func initialModel() model {
@@ -51,17 +58,26 @@ func (m model) Init() tea.Cmd {
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 
+	m.textInput, cmd = m.textInput.Update(msg)
+	m.repos = core.Search(m.textInput.Value())
+
 	switch msg := msg.(type) {
 	case tea.KeyPressMsg:
 		switch msg.String() {
 		case "enter", "ctrl+c", "esc":
 			m.quitting = true
 			return m, tea.Quit
+		case "up":
+			if m.cursor > 0 {
+				m.cursor--
+			}
+		case "down":
+			if m.cursor < len(m.repos)-1 {
+				m.cursor++
+			}
 		}
 	}
 
-	m.textInput, cmd = m.textInput.Update(msg)
-	m.repos = core.Search(m.textInput.Value())
 	return m, cmd
 }
 
@@ -74,7 +90,7 @@ func (m model) View() tea.View {
 
 	str := lipgloss.JoinVertical(lipgloss.Top, m.headerView(), m.textInput.View(), m.footerView())
 	if m.quitting {
-		str += "\n"
+		str = ""
 	}
 
 	v := tea.NewView(str)
@@ -82,10 +98,14 @@ func (m model) View() tea.View {
 	return v
 }
 
-func (m model) headerView() string { 
+func (m model) headerView() string {
 	res := "Repos:\n"
 	search_res := make([]string, len(m.repos))
 	for i, repo := range m.repos {
+		if i == m.cursor {
+			search_res[i] = "> " + repo.Value
+			continue
+		}
 		search_res[i] = repo.Value
 	}
 	res += strings.Join(search_res, "\n")

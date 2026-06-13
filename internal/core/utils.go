@@ -21,7 +21,6 @@ const lockPath string = "/tmp/cdrepo.lock"
 const daemonCheckTimeout time.Duration = 10 * time.Second
 const daemonTimeout time.Duration = 60 * time.Second
 
-
 func init() {
 	home := os.Getenv("HOME")
 	fullConfPath := path.Join(home, ".config", configPath)
@@ -86,25 +85,37 @@ func Register() error {
 	return nil
 }
 
-func Search(val string) []*searchif.SearchResult {
+type SearchMeta struct {
+	conn   *grpc.ClientConn
+	client *pb.DaemonClient
+}
+
+func InitSearch() (SearchMeta, error) {
 	conn, err := grpc.NewClient("unix:/tmp/cdrepo.sock",
 		grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		fmt.Printf("did not connect: %v\n", err)
+		return SearchMeta{}, err
 	}
-	defer conn.Close()
 	c := pb.NewDaemonClient(conn)
+	return SearchMeta{conn: conn, client: &c}, nil
+}
 
+func FinSearch(meta SearchMeta) {
+	meta.conn.Close()
+}
+
+func Search(meta SearchMeta, val string) []*searchif.ViewSearchResult {
 	// Contact the server and print out its response.
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	r, err := c.Search(ctx, &pb.SearchRequest{Query: val})
+	r, err := (*meta.client).Search(ctx, &pb.SearchRequest{Query: val})
 	if err != nil {
 		fmt.Printf("could not greet: %v\n", err)
 	}
-	ret := make([]*searchif.SearchResult, len(r.Results))
+	ret := make([]*searchif.ViewSearchResult, len(r.Results))
 	for i, res := range r.Results {
-		ret[i] = &searchif.SearchResult{Score: int(res.Score), Value: res.Value}
+		ret[i] = &searchif.ViewSearchResult{Score: int(res.Score), Value: res.Value}
 	}
-	return ret;
+	return ret
 }

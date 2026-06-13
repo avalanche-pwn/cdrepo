@@ -22,11 +22,11 @@ func (e *edge) init(v int) {
 }
 
 type node struct {
-	value string
+	value searchif.SearchNode
 	edges []*edge
 }
 
-func (n *node) init(s string) {
+func (n *node) init(s searchif.SearchNode) {
 	n.value = s
 	n.edges = make([]*edge, 0)
 }
@@ -127,16 +127,16 @@ func levenshtein(a, b string, maxDistance int) int {
 	return result
 }
 
-func (bktree *BKTree) Add(s string) {
+func (bktree *BKTree) Add(s searchif.SearchNode) searchif.SearchNode {
 	if bktree.root == nil {
 		var r node
 		bktree.root = &r
 		bktree.root.init(s)
-		return
+		return s
 	}
 	current := bktree.root
 	for {
-		distance := levenshtein(current.value, s, -1)
+		distance := levenshtein(current.value.Key(), s.Key(), -1)
 		for _, e := range current.edges {
 			if e.value != distance {
 				continue
@@ -144,8 +144,8 @@ func (bktree *BKTree) Add(s string) {
 			current = e.elem
 			continue
 		}
-		if current.value == s {
-			break
+		if current.value.Key() == s.Key() {
+			return current.value
 		}
 		var n node
 		var e edge
@@ -155,6 +155,7 @@ func (bktree *BKTree) Add(s string) {
 		current.edges = append(current.edges, &e)
 		break
 	}
+	return s
 }
 
 func (bktree *BKTree) Search(s string) []*searchif.SearchResult {
@@ -167,7 +168,7 @@ func (bktree *BKTree) Search(s string) []*searchif.SearchResult {
 	for len(candidates) != 0 {
 		var current *node
 		current, candidates = candidates[0], candidates[1:]
-		distance := levenshtein(current.value, s, -1)
+		distance := levenshtein(current.value.Key(), s, -1)
 		if distance < maxEditDistance {
 			result = append(result,
 				&searchif.SearchResult{Score: distance, Value: current.value})

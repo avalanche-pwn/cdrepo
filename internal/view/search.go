@@ -4,10 +4,10 @@ package view
 // component library.
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strings"
-	"fmt"
 
 	"charm.land/bubbles/v2/textinput"
 	tea "charm.land/bubbletea/v2"
@@ -22,22 +22,27 @@ func Run() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	p := tea.NewProgram(initialModel(), tea.WithInput(tty), tea.WithOutput(tty))
+	m := initialModel()
+	m.search_meta, err = core.InitSearch()
+
+	p := tea.NewProgram(m, tea.WithInput(tty), tea.WithOutput(tty))
 	tea_m, err := p.Run()
-	m := tea_m.(model)
 	if err != nil {
 		log.Fatal(err)
 	}
+	m = tea_m.(model)
+	core.FinSearch(m.search_meta)
 	tty.Close()
 	fmt.Fprint(os.Stdout, m.repos[m.cursor].Value)
 }
 
 type model struct {
-	textInput textinput.Model
-	err       error
-	quitting  bool
-	repos     []*searchif.SearchResult
-	cursor    int
+	textInput   textinput.Model
+	err         error
+	quitting    bool
+	repos       []*searchif.ViewSearchResult
+	cursor      int
+	search_meta core.SearchMeta
 }
 
 func initialModel() model {
@@ -59,7 +64,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 
 	m.textInput, cmd = m.textInput.Update(msg)
-	m.repos = core.Search(m.textInput.Value())
+	m.repos = core.Search(m.search_meta, m.textInput.Value())
 
 	switch msg := msg.(type) {
 	case tea.KeyPressMsg:

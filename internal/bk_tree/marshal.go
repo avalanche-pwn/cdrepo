@@ -1,12 +1,14 @@
 package bk_tree
 
+import "github.com/avalanche-pwn/cdrepo/internal/searchif"
+
 type modelOfEdge struct {
 	Value int
 	Elem  *modelOfNode
 }
 
 type modelOfNode struct {
-	Value string
+	Value searchif.SearchNode
 	Edges []*modelOfEdge
 }
 

@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"encoding/gob"
 
 	"github.com/avalanche-pwn/cdrepo/internal/bk_tree"
-	"github.com/avalanche-pwn/cdrepo/internal/searchif"
 	pb "github.com/avalanche-pwn/cdrepo/internal/daemon_pb"
+	"github.com/avalanche-pwn/cdrepo/internal/searchif"
 
 	"google.golang.org/grpc"
 )
@@ -20,6 +21,12 @@ type daemon struct {
 	keepAlive chan bool
 }
 
+type stringSearch string
+
+func (s stringSearch) Key() string {
+	return string(s)
+}
+
 func searchFactory() searchif.FuzzySearcher {
 	return &bk_tree.BKTree{}
 }
@@ -27,8 +34,12 @@ func searchFactory() searchif.FuzzySearcher {
 func (d *daemon) register(path string) {
 	if isRepo(path) {
 		fmt.Printf("Adding path %s\n", path)
-		d.search.Add(path)
+		d.search.Add(stringSearch(path))
 	}
+}
+
+func init() {
+	gob.Register(stringSearch(""))
 }
 
 func (d *daemon) init() {
@@ -59,7 +70,9 @@ func (d *daemon) Search(_ context.Context, in *pb.SearchRequest) (
 	results := make([]*pb.SearchResult, len(api_res))
 
 	for i, val := range api_res {
-		results[i] = &pb.SearchResult{Score: int32(val.Score), Value: val.Value}
+		res_node := val.Value.(stringSearch)
+		results[i] = &pb.SearchResult{
+			Score: int32(val.Score), Value: string(res_node)}
 	}
 
 	rsp := &pb.SearchResponse{Results: results}

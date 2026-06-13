@@ -33,13 +33,20 @@ func Run() {
 	m = tea_m.(model)
 	core.FinSearch(m.search_meta)
 	tty.Close()
-	fmt.Fprint(os.Stdout, m.repos[m.cursor].Value)
+	if !m.canceled {
+		fmt.Fprint(os.Stdout, m.repos[m.cursor].Value)
+		return
+	}
+	if wd, err := os.Getwd(); err == nil {
+		fmt.Fprint(os.Stdout, wd)
+	}
 }
 
 type model struct {
 	textInput   textinput.Model
 	err         error
 	quitting    bool
+	canceled    bool
 	repos       []*searchif.ViewSearchResult
 	cursor      int
 	search_meta core.SearchMeta
@@ -66,8 +73,12 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyPressMsg:
 		switch msg.String() {
-		case "enter", "ctrl+c", "esc":
+		case "enter", "esc":
 			m.quitting = true
+			return m, tea.Quit
+		case "ctrl+c":
+			m.quitting = true
+			m.canceled = true
 			return m, tea.Quit
 		case "up", "ctrl+p":
 			if m.cursor > 0 {

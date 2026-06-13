@@ -18,8 +18,8 @@ import (
 const configPath string = "cdrepo"
 const searchFile string = "cdrepo.bin"
 const lockPath string = "/tmp/cdrepo.lock"
-const daemonCheckTimeout time.Duration = 10 * time.Second
-const daemonTimeout time.Duration = 60 * time.Second
+const daemonCheckTimeout time.Duration = 10 * time.Minute
+const daemonTimeout time.Duration = 60 * time.Minute
 
 func init() {
 	home := os.Getenv("HOME")

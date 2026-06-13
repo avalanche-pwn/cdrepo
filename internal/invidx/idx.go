@@ -9,6 +9,7 @@ import (
 )
 
 const searchSpaceLimit int = 3
+const maxResCount int = 7
 
 type internalSearchNode struct {
 	Word    string
@@ -60,7 +61,7 @@ func (i *InvIdx) Search(s string) []*searchif.SearchResult {
 		if len(res) == 0 {
 			continue
 		}
-		for match_idx, match := range res[:searchSpaceLimit] {
+		for match_idx, match := range res[:min(searchSpaceLimit, len(res))] {
 			current := match.Value.(*internalSearchNode)
 			for _, idx := range current.Entries {
 				count, _ := m[idx]
@@ -78,5 +79,5 @@ func (i *InvIdx) Search(s string) []*searchif.SearchResult {
 	sort.Slice(ss, func(i, j int) bool {
 		return ss[i].Score > ss[j].Score
 	})
-	return ss
+	return ss[:min(maxResCount, len(ss))]
 }

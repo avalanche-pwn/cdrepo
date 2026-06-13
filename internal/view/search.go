@@ -63,9 +63,6 @@ func (m model) Init() tea.Cmd {
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 
-	m.textInput, cmd = m.textInput.Update(msg)
-	m.repos = core.Search(m.search_meta, m.textInput.Value())
-
 	switch msg := msg.(type) {
 	case tea.KeyPressMsg:
 		switch msg.String() {
@@ -76,12 +73,17 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if m.cursor > 0 {
 				m.cursor--
 			}
+			return m, cmd
 		case "down":
 			if m.cursor < len(m.repos)-1 {
 				m.cursor++
 			}
+			return m, cmd
 		}
 	}
+
+	m.textInput, cmd = m.textInput.Update(msg)
+	m.repos = core.Search(m.search_meta, m.textInput.Value())
 
 	return m, cmd
 }

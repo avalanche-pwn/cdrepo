@@ -7,9 +7,9 @@ import (
 	"os"
 	"encoding/gob"
 
-	"github.com/avalanche-pwn/cdrepo/internal/bk_tree"
 	pb "github.com/avalanche-pwn/cdrepo/internal/daemon_pb"
 	"github.com/avalanche-pwn/cdrepo/internal/searchif"
+	"github.com/avalanche-pwn/cdrepo/internal/invidx"
 
 	"google.golang.org/grpc"
 )
@@ -28,7 +28,9 @@ func (s stringSearch) Key() string {
 }
 
 func searchFactory() searchif.FuzzySearcher {
-	return &bk_tree.BKTree{}
+	searcher := invidx.InvIdx{}
+	searcher.Init(nil)
+	return &searcher
 }
 
 func (d *daemon) register(path string) {

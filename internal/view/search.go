@@ -84,6 +84,11 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	m.textInput, cmd = m.textInput.Update(msg)
 	m.repos = core.Search(m.search_meta, m.textInput.Value())
+	if len(m.repos) <= m.cursor {
+		// After search result update it's possible
+		// for cursor to be over the new slices size
+		m.cursor = len(m.repos) - 1
+	}
 
 	return m, cmd
 }

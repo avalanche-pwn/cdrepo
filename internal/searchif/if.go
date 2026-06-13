@@ -20,9 +20,18 @@ type SearchNode interface {
 	Key() string
 }
 
+type Decodable interface {
+	Decode() FuzzySearcher
+}
+
+const FileVersion int = 1
+type FileFormat struct {
+	Version int
+	Value Decodable
+}
+
 type FuzzySearcher interface {
 	Add(s SearchNode) SearchNode
-	Read(s string)
-	Save(s string)
+	Encode() Decodable
 	Search(s string) []*SearchResult
 }

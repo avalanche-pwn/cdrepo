@@ -1,8 +1,8 @@
 package invidx
 
 import (
-	"strings"
 	"sort"
+	"strings"
 
 	"github.com/avalanche-pwn/cdrepo/internal/bk_tree"
 	"github.com/avalanche-pwn/cdrepo/internal/searchif"
@@ -11,12 +11,12 @@ import (
 const searchSpaceLimit int = 3
 
 type internalSearchNode struct {
-	word    string
-	entries []int
+	Word    string
+	Entries []int
 }
 
 func (i *internalSearchNode) Key() string {
-	return i.word
+	return i.Word
 }
 
 type InvIdx struct {
@@ -46,9 +46,9 @@ func (i *InvIdx) Add(s searchif.SearchNode) searchif.SearchNode {
 	i.entries = append(i.entries, s)
 
 	for word := range strings.SplitSeq(s.Key(), "/") {
-		isn := internalSearchNode{word: word}
+		isn := internalSearchNode{Word: word}
 		res := i.mappingSearcher.Add(&isn).(*internalSearchNode)
-		res.entries = append(res.entries, idx)
+		res.Entries = append(res.Entries, idx)
 	}
 	return s
 }
@@ -62,7 +62,7 @@ func (i *InvIdx) Search(s string) []*searchif.SearchResult {
 		}
 		for match_idx, match := range res[:searchSpaceLimit] {
 			current := match.Value.(*internalSearchNode)
-			for _, idx := range current.entries {
+			for _, idx := range current.Entries {
 				count, _ := m[idx]
 				m[idx] = count + searchSpaceLimit - match_idx
 			}
@@ -80,6 +80,3 @@ func (i *InvIdx) Search(s string) []*searchif.SearchResult {
 	})
 	return ss
 }
-
-func (i *InvIdx) Read(s string) {}
-func (i *InvIdx) Save(s string) {}

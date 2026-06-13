@@ -1,6 +1,10 @@
 package bk_tree
 
-import "github.com/avalanche-pwn/cdrepo/internal/searchif"
+import (
+	"encoding/gob"
+
+	"github.com/avalanche-pwn/cdrepo/internal/searchif"
+)
 
 type modelOfEdge struct {
 	Value int
@@ -44,16 +48,20 @@ func (m *modelOfNode) Decode() node {
 	return n
 }
 
-func (bktree *BKTree) Encode() any {
+func (m *modelOfBKTree) Decode() searchif.FuzzySearcher {
+	root := m.Root.Decode()
+	return &BKTree{root: &root}
+}
+
+func (bktree *BKTree) Encode() searchif.Decodable {
 	var root_model modelOfNode
 	if bktree.root != nil {
 		root_model = bktree.root.Encode()
 	}
 	model := modelOfBKTree{Root: &root_model}
-	return model
+	return &model
 }
 
-func (bktree *BKTree) Decode(model modelOfBKTree) {
-	root := model.Root.Decode()
-	bktree.root = &root
+func init() {
+	gob.Register(&modelOfBKTree{})
 }

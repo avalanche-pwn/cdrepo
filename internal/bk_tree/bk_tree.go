@@ -1,9 +1,6 @@
 package bk_tree
 
 import (
-	"bytes"
-	"encoding/gob"
-	"os"
 	"sort"
 
 	"github.com/avalanche-pwn/cdrepo/internal/searchif"
@@ -185,22 +182,22 @@ func (bktree *BKTree) Search(s string) []*searchif.SearchResult {
 	return result
 }
 
-func (bktree *BKTree) Save(s string) {
-	var network bytes.Buffer        // Stand-in for a network connection
-	enc := gob.NewEncoder(&network) // Will write to network.
-
-	// Encode (send) some values.
-	enc.Encode(bktree.Encode())
-	os.WriteFile(s, network.Bytes(), 0644)
-}
-
-func (bktree *BKTree) Read(s string) {
-	f, _ := os.Open(s)
-	defer f.Close()
-	dec := gob.NewDecoder(f) // Will write to network.
-	var test modelOfBKTree
-
-	// Encode (send) some values.
-	dec.Decode(&test)
-	bktree.Decode(test)
-}
+// func (bktree *BKTree) Save(s string) {
+// 	var network bytes.Buffer        // Stand-in for a network connection
+// 	enc := gob.NewEncoder(&network) // Will write to network.
+// 
+// 	// Encode (send) some values.
+// 	enc.Encode(bktree.Encode())
+// 	os.WriteFile(s, network.Bytes(), 0644)
+// }
+// 
+// func (bktree *BKTree) Read(s string) {
+// 	f, _ := os.Open(s)
+// 	defer f.Close()
+// 	dec := gob.NewDecoder(f) // Will write to network.
+// 	var test modelOfBKTree
+// 
+// 	// Encode (send) some values.
+// 	dec.Decode(&test)
+// 	bktree.Decode(test)
+// }

@@ -1,7 +1,7 @@
-proto_src := internal/daemon_pb/daemon.proto
+proto_src := internal/daemonpb/daemon.proto
 proto_out := \
-	internal/daemon_pb/daemon.pb.go \
-	internal/daemon_pb/daemon_grpc.pb.go
+	internal/daemonpb/daemon.pb.go \
+	internal/daemonpb/daemon_grpc.pb.go
 
 build: generate
 	go build ./cmd/cdrepo/cdrepo.go

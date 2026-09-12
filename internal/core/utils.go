@@ -8,7 +8,7 @@ import (
 	"syscall"
 	"time"
 
-	pb "github.com/avalanche-pwn/cdrepo/internal/daemon_pb"
+	pb "github.com/avalanche-pwn/cdrepo/internal/daemonpb"
 	"github.com/avalanche-pwn/cdrepo/internal/searchif"
 
 	"google.golang.org/grpc"

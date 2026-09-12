@@ -14,7 +14,7 @@
 
 syntax = "proto3";
 
-option go_package = "github.com/avalanche-pwn/cdrepo/daemon_pb";
+option go_package = "github.com/avalanche-pwn/cdrepo/daemonpb";
 option java_multiple_files = true;
 option java_package = "com.github.avalanche-pwn.cdrepo";
 option java_outer_classname = "Daemon";

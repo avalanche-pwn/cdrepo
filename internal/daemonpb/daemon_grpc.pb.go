@@ -16,9 +16,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.2
 // - protoc             v7.34.2
-// source: internal/daemon_pb/daemon.proto
+// source: internal/daemonpb/daemon.proto
 
-package daemon_pb
+package daemonpb
 
 import (
 	context "context"
@@ -169,5 +169,5 @@ var Daemon_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "internal/daemon_pb/daemon.proto",
+	Metadata: "internal/daemonpb/daemon.proto",
 }

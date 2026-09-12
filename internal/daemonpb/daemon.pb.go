@@ -16,9 +16,9 @@
 // versions:
 // 	protoc-gen-go v1.36.12
 // 	protoc        v7.34.2
-// source: internal/daemon_pb/daemon.proto
+// source: internal/daemonpb/daemon.proto
 
-package daemon_pb
+package daemonpb
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -44,7 +44,7 @@ type RegisterRequest struct {
 
 func (x *RegisterRequest) Reset() {
 	*x = RegisterRequest{}
-	mi := &file_internal_daemon_pb_daemon_proto_msgTypes[0]
+	mi := &file_internal_daemonpb_daemon_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -56,7 +56,7 @@ func (x *RegisterRequest) String() string {
 func (*RegisterRequest) ProtoMessage() {}
 
 func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_daemon_pb_daemon_proto_msgTypes[0]
+	mi := &file_internal_daemonpb_daemon_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -69,7 +69,7 @@ func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterRequest.ProtoReflect.Descriptor instead.
 func (*RegisterRequest) Descriptor() ([]byte, []int) {
-	return file_internal_daemon_pb_daemon_proto_rawDescGZIP(), []int{0}
+	return file_internal_daemonpb_daemon_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *RegisterRequest) GetPath() string {
@@ -88,7 +88,7 @@ type RegisterResponse struct {
 
 func (x *RegisterResponse) Reset() {
 	*x = RegisterResponse{}
-	mi := &file_internal_daemon_pb_daemon_proto_msgTypes[1]
+	mi := &file_internal_daemonpb_daemon_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -100,7 +100,7 @@ func (x *RegisterResponse) String() string {
 func (*RegisterResponse) ProtoMessage() {}
 
 func (x *RegisterResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_daemon_pb_daemon_proto_msgTypes[1]
+	mi := &file_internal_daemonpb_daemon_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -113,7 +113,7 @@ func (x *RegisterResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterResponse.ProtoReflect.Descriptor instead.
 func (*RegisterResponse) Descriptor() ([]byte, []int) {
-	return file_internal_daemon_pb_daemon_proto_rawDescGZIP(), []int{1}
+	return file_internal_daemonpb_daemon_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *RegisterResponse) GetSuccess() bool {
@@ -132,7 +132,7 @@ type SearchRequest struct {
 
 func (x *SearchRequest) Reset() {
 	*x = SearchRequest{}
-	mi := &file_internal_daemon_pb_daemon_proto_msgTypes[2]
+	mi := &file_internal_daemonpb_daemon_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -144,7 +144,7 @@ func (x *SearchRequest) String() string {
 func (*SearchRequest) ProtoMessage() {}
 
 func (x *SearchRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_daemon_pb_daemon_proto_msgTypes[2]
+	mi := &file_internal_daemonpb_daemon_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -157,7 +157,7 @@ func (x *SearchRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchRequest.ProtoReflect.Descriptor instead.
 func (*SearchRequest) Descriptor() ([]byte, []int) {
-	return file_internal_daemon_pb_daemon_proto_rawDescGZIP(), []int{2}
+	return file_internal_daemonpb_daemon_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *SearchRequest) GetQuery() string {
@@ -176,7 +176,7 @@ type SearchResponse struct {
 
 func (x *SearchResponse) Reset() {
 	*x = SearchResponse{}
-	mi := &file_internal_daemon_pb_daemon_proto_msgTypes[3]
+	mi := &file_internal_daemonpb_daemon_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -188,7 +188,7 @@ func (x *SearchResponse) String() string {
 func (*SearchResponse) ProtoMessage() {}
 
 func (x *SearchResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_daemon_pb_daemon_proto_msgTypes[3]
+	mi := &file_internal_daemonpb_daemon_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -201,7 +201,7 @@ func (x *SearchResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchResponse.ProtoReflect.Descriptor instead.
 func (*SearchResponse) Descriptor() ([]byte, []int) {
-	return file_internal_daemon_pb_daemon_proto_rawDescGZIP(), []int{3}
+	return file_internal_daemonpb_daemon_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *SearchResponse) GetResults() []*SearchResult {
@@ -221,7 +221,7 @@ type SearchResult struct {
 
 func (x *SearchResult) Reset() {
 	*x = SearchResult{}
-	mi := &file_internal_daemon_pb_daemon_proto_msgTypes[4]
+	mi := &file_internal_daemonpb_daemon_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -233,7 +233,7 @@ func (x *SearchResult) String() string {
 func (*SearchResult) ProtoMessage() {}
 
 func (x *SearchResult) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_daemon_pb_daemon_proto_msgTypes[4]
+	mi := &file_internal_daemonpb_daemon_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -246,7 +246,7 @@ func (x *SearchResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchResult.ProtoReflect.Descriptor instead.
 func (*SearchResult) Descriptor() ([]byte, []int) {
-	return file_internal_daemon_pb_daemon_proto_rawDescGZIP(), []int{4}
+	return file_internal_daemonpb_daemon_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *SearchResult) GetScore() int32 {
@@ -263,11 +263,11 @@ func (x *SearchResult) GetValue() string {
 	return ""
 }
 
-var File_internal_daemon_pb_daemon_proto protoreflect.FileDescriptor
+var File_internal_daemonpb_daemon_proto protoreflect.FileDescriptor
 
-const file_internal_daemon_pb_daemon_proto_rawDesc = "" +
+const file_internal_daemonpb_daemon_proto_rawDesc = "" +
 	"\n" +
-	"\x1finternal/daemon_pb/daemon.proto\x12\n" +
+	"\x1einternal/daemonpb/daemon.proto\x12\n" +
 	"helloworld\"%\n" +
 	"\x0fRegisterRequest\x12\x12\n" +
 	"\x04path\x18\x01 \x01(\tR\x04path\",\n" +
@@ -282,30 +282,30 @@ const file_internal_daemon_pb_daemon_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value2\x94\x01\n" +
 	"\x06Daemon\x12G\n" +
 	"\bRegister\x12\x1b.helloworld.RegisterRequest\x1a\x1c.helloworld.RegisterResponse\"\x00\x12A\n" +
-	"\x06Search\x12\x19.helloworld.SearchRequest\x1a\x1a.helloworld.SearchResponse\"\x00BV\n" +
-	"\x1fcom.github.avalanche-pwn.cdrepoB\x06DaemonP\x01Z)github.com/avalanche-pwn/cdrepo/daemon_pbb\x06proto3"
+	"\x06Search\x12\x19.helloworld.SearchRequest\x1a\x1a.helloworld.SearchResponse\"\x00BU\n" +
+	"\x1fcom.github.avalanche-pwn.cdrepoB\x06DaemonP\x01Z(github.com/avalanche-pwn/cdrepo/daemonpbb\x06proto3"
 
 var (
-	file_internal_daemon_pb_daemon_proto_rawDescOnce sync.Once
-	file_internal_daemon_pb_daemon_proto_rawDescData []byte
+	file_internal_daemonpb_daemon_proto_rawDescOnce sync.Once
+	file_internal_daemonpb_daemon_proto_rawDescData []byte
 )
 
-func file_internal_daemon_pb_daemon_proto_rawDescGZIP() []byte {
-	file_internal_daemon_pb_daemon_proto_rawDescOnce.Do(func() {
-		file_internal_daemon_pb_daemon_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_internal_daemon_pb_daemon_proto_rawDesc), len(file_internal_daemon_pb_daemon_proto_rawDesc)))
+func file_internal_daemonpb_daemon_proto_rawDescGZIP() []byte {
+	file_internal_daemonpb_daemon_proto_rawDescOnce.Do(func() {
+		file_internal_daemonpb_daemon_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_internal_daemonpb_daemon_proto_rawDesc), len(file_internal_daemonpb_daemon_proto_rawDesc)))
 	})
-	return file_internal_daemon_pb_daemon_proto_rawDescData
+	return file_internal_daemonpb_daemon_proto_rawDescData
 }
 
-var file_internal_daemon_pb_daemon_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
-var file_internal_daemon_pb_daemon_proto_goTypes = []any{
+var file_internal_daemonpb_daemon_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_internal_daemonpb_daemon_proto_goTypes = []any{
 	(*RegisterRequest)(nil),  // 0: helloworld.RegisterRequest
 	(*RegisterResponse)(nil), // 1: helloworld.RegisterResponse
 	(*SearchRequest)(nil),    // 2: helloworld.SearchRequest
 	(*SearchResponse)(nil),   // 3: helloworld.SearchResponse
 	(*SearchResult)(nil),     // 4: helloworld.SearchResult
 }
-var file_internal_daemon_pb_daemon_proto_depIdxs = []int32{
+var file_internal_daemonpb_daemon_proto_depIdxs = []int32{
 	4, // 0: helloworld.SearchResponse.results:type_name -> helloworld.SearchResult
 	0, // 1: helloworld.Daemon.Register:input_type -> helloworld.RegisterRequest
 	2, // 2: helloworld.Daemon.Search:input_type -> helloworld.SearchRequest
@@ -318,26 +318,26 @@ var file_internal_daemon_pb_daemon_proto_depIdxs = []int32{
 	0, // [0:1] is the sub-list for field type_name
 }
 
-func init() { file_internal_daemon_pb_daemon_proto_init() }
-func file_internal_daemon_pb_daemon_proto_init() {
-	if File_internal_daemon_pb_daemon_proto != nil {
+func init() { file_internal_daemonpb_daemon_proto_init() }
+func file_internal_daemonpb_daemon_proto_init() {
+	if File_internal_daemonpb_daemon_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_internal_daemon_pb_daemon_proto_rawDesc), len(file_internal_daemon_pb_daemon_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_internal_daemonpb_daemon_proto_rawDesc), len(file_internal_daemonpb_daemon_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_internal_daemon_pb_daemon_proto_goTypes,
-		DependencyIndexes: file_internal_daemon_pb_daemon_proto_depIdxs,
-		MessageInfos:      file_internal_daemon_pb_daemon_proto_msgTypes,
+		GoTypes:           file_internal_daemonpb_daemon_proto_goTypes,
+		DependencyIndexes: file_internal_daemonpb_daemon_proto_depIdxs,
+		MessageInfos:      file_internal_daemonpb_daemon_proto_msgTypes,
 	}.Build()
-	File_internal_daemon_pb_daemon_proto = out.File
-	file_internal_daemon_pb_daemon_proto_goTypes = nil
-	file_internal_daemon_pb_daemon_proto_depIdxs = nil
+	File_internal_daemonpb_daemon_proto = out.File
+	file_internal_daemonpb_daemon_proto_goTypes = nil
+	file_internal_daemonpb_daemon_proto_depIdxs = nil
 }
